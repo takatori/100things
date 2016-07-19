@@ -10,6 +10,7 @@ libraryDependencies ++= Seq(
   jdbc,
   cache,
   ws,
+  specs2 % Test,
   "org.scalatestplus.play" %% "scalatestplus-play" % "1.5.1" % Test,
   "com.softwaremill.macwire" %% "macros" % "2.2.3" % "provided",
   "com.typesafe.play" %% "play-slick" % "2.0.0",
