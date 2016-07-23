@@ -1,9 +1,9 @@
 package com.takatori.hundredthings
 
 import com.takatori.hundredthings.dao.UserDao
-import com.takatori.hundredthings.models.User
-import slick.backend.DatabaseConfig // A configuration for a Database plus a matching Slick driver.
-import slick.driver.JdbcProfile // A profile for accessing SQL databases via JDBC. All drivers for JDBC-based databases implement this profile.
+import com.takatori.hundredthings.models.{User, UserTable}
+import slick.backend.DatabaseConfig
+import slick.driver.JdbcProfile
 
 import scala.concurrent.Await
 import scala.concurrent.duration._
@@ -15,16 +15,17 @@ class Seed(
 {
   import dbConfig.driver.api._
   val db = dbConfig.db
+  val Users = TableQuery[UserTable]
 
   def run(): Unit = {
     val setup = DBIO.seq(
       // Create the tables, including primary and foreign keys
       sqlu"DROP ALL OBJECTS",
-      (userDao.query.schema).create,
+      (Users.schema).create,
 
       // Insert some users
-      userDao.query += User(1, "takatori"),
-      userDao.query += User(2, "satoshi")
+      Users += User(1, "takatori"),
+      Users += User(2, "satoshi")
     )
     Await.result(db.run(setup), 30 seconds)
   }

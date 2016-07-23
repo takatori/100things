@@ -10,8 +10,10 @@ class UserDao(dbConfig: DatabaseConfig[JdbcProfile]) {
   import dbConfig.driver.api._
 
   val db = dbConfig.db
-  val query = TableQuery[UserTable]
+  val Users = TableQuery[UserTable]
 
-  def all: Future[Seq[User]] = db.run(query.result)
+  def all: Future[Seq[User]] = db.run(Users.result)
+
+  def insert(user: User): Future[Int] = db.run((Users returning Users.map(_.id)) += user)
 }
 
