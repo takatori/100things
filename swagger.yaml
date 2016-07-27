@@ -10,8 +10,8 @@ info:
     url: https://github.com/takatori
   license:
     name: MIT
-    url:
-host:
+    url: hoge.com
+host: hoge.com
 basePath: /api
 schemes:
   - http
