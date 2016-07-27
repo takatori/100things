@@ -102,7 +102,7 @@ definitions:
           id:
             type: integer
             format: int64
-  NewPet:
+  NewUser:
     required:
       - name
     properties:
