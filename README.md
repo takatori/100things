@@ -2,7 +2,7 @@
 ---------
 
 ## Overview
-100things manage your Todos.
+100things to Do Before...
 
 ## Fetures
 - Simple 
@@ -12,7 +12,7 @@
 
 
 ## Links
-- [API Document](https://app.apiary.io/100things/editor)
+- [API Document](http://docs.100things.apiary.io)
 
 ## Note
 
