@@ -93,6 +93,24 @@ paths:
           schema:
             $ref: '#/definitions/Error'
 definitions:
+  Things:
+    allOf:
+      - $ref: '#/definitions/NewThings'
+      - rquired:
+        - id
+        - state
+        properties:
+          id:
+            type: integer
+            format: int64
+          state:
+            type: boolean
+  NewThings:
+    requreid:
+      - content
+    properties:
+      content:
+        type: string
   User:
     allOf:
       - $ref: '#/definitions/NewUser'
