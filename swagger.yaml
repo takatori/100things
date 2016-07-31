@@ -55,12 +55,12 @@ paths:
           description: unexpected error
           schema:
             $ref: '#/definitions/Error'
-  /users/{id}:
+  /users/{user_id}:
     get:
       description: Returns a user based on a single ID
       operationId: find user by id
       parameters:
-        - name: id
+        - name: user_id
           in: path
           description: ID of use to fetch
           required: true
@@ -79,7 +79,7 @@ paths:
       description: deletes a single user based on the ID supplied
       operationId: deleteUser
       parameters:
-        - name: id
+        - name: user_id
           in: path
           description: ID of user to delete
           required: true
@@ -90,6 +90,92 @@ paths:
           description: user deleted
         default:
           description: unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+  /users/{user_id}/things:
+    get:
+      description: Returns all things from systems by user_id
+      parameters:
+        - name: user_id
+          in: path
+          description: ID of user to fetch things
+          required: true
+          type: integer
+          format: int64
+      responses:
+        200:
+          description: thing response
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Things'
+        default:
+          description: unexpected Error
+          schema:
+            $ref: '#/definitions/Error'
+    post:
+      description: Create a new thing in the store.
+      parameters:
+        - name: thing
+          in: body
+          description: Thing to add to the store
+          required: true
+          schema:
+            $ref: '#/definitions/NewThings'
+      responses:
+        200:
+          description: thing response
+          schema:
+            $ref: '#/definitions/Things'
+        default:
+          description: unexpected Error
+          schema:
+            $ref: '#/definitions/Error'
+  /users/{user_id}/things/{id}:
+    get:
+      description: Returns a things based on the ID supplied
+      parameters:
+        - name: user_id
+          in: path
+          description: ID of user
+          required: true
+          type: integer
+          format: int64
+        - name: id
+          in: path
+          description: ID of thing
+          required: true
+          type: integer
+          format: int64
+      responses:
+        200:
+          description: thing response
+          schema:
+            $ref: '#/definitions/Things'
+        default:
+          description: unexpected Error
+          schema:
+            $ref: '#/definitions/Error'
+    delete:
+      description: deletes a single thing based on the ID supplied
+      parameters:
+        - name: user_id
+          in: path
+          description: ID of user
+          required: true
+          type: integer
+          format: int64
+        - name: id
+          in: path
+          description: ID of thing
+          required: true
+          type: integer
+          format: int64
+      responses:
+        204:
+          description: thing deleted
+        default:
+          description: unexpected Error
           schema:
             $ref: '#/definitions/Error'
 definitions:
