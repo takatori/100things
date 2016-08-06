@@ -19,6 +19,3 @@ class UserTable(tag: Tag) extends Table[User](tag, "User") {
   def name = column[String]("NAME")
   def *    = (id, name) <> ((User.apply _).tupled, User.unapply) //http://slick.lightbend.com/doc/3.1.0/schemas.html#mapped-tables
 }
-
-
-

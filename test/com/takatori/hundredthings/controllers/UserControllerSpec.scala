@@ -27,4 +27,8 @@ class UserControllerSpec extends Specification {
       json mustEqual Json.toJson(users)
     }
   }
+
+  "Create user" in new ControllerContext {
+
+  }
 }
