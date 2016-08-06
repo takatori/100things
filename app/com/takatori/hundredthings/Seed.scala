@@ -9,9 +9,7 @@ import scala.concurrent.Await
 import scala.concurrent.duration._
 import scala.language.postfixOps
 
-class Seed(
-          val dbConfig: DatabaseConfig[JdbcProfile],
-          val userDao: UserDao)
+class Seed(val dbConfig: DatabaseConfig[JdbcProfile], val userDao: UserDao)
 {
   import dbConfig.driver.api._
   val db = dbConfig.db

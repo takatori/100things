@@ -21,11 +21,7 @@ class AppApplicationLoader extends ApplicationLoader {
   }
 }
 
-trait AppComponents
-extends BuiltInComponents
-  with DatabaseModule
-  with DaoModule
-  with ControllerModule
+trait AppComponents extends BuiltInComponents with DatabaseModule with DaoModule with ControllerModule
 {
     implicit val ec: ExecutionContext = scala.concurrent.ExecutionContext.Implicits.global
     lazy val assets: Assets = wire[Assets]
@@ -34,8 +30,4 @@ extends BuiltInComponents
       val prefix: String = "/"
       wire[Routes]
     }
-
-    //def userDao: wire[UserDao]
-    val seed = wire[Seed] // dbConfigをinject
-    seed.run()
 }

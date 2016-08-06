@@ -14,8 +14,10 @@ class UserController(userDao: UserDao)(implicit ec: ExecutionContext) extends Co
   def insert() = Action(parse.json) { request =>
     val userResult: JsResult[User] = request.body.validate[User]
     userResult.fold(
-      errors => { BadRequest(Json.obj("status" -> "KO", "message" -> JsError.toJson(errors))) },
-      user   => {
+      errors => {
+        BadRequest(Json.obj("status" -> "KO", "message" -> JsError.toJson(errors)))
+      },
+      user => {
         userDao.insert(user)
         Ok(Json.obj("status" -> "OK", "message" -> ("Place '" + user.name + "' saved.")))
       })
