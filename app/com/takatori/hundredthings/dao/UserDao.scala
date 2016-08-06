@@ -16,5 +16,12 @@ class UserDao(dbConfig: DatabaseConfig[JdbcProfile]) {
 
   def insert(user: User): Future[Int] = db.run((Users returning Users.map(_.id)) += user)
 
+  def delete(userId: Int): Future[Int] = {
+    val q = Users.filter(_.id === userId)
+    val action = q.delete
+    val affectedRowsCount: Future[Int] = db.run(action)
+    affectedRowsCount
+  }
+
 }
 

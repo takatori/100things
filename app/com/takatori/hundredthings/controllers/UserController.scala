@@ -22,4 +22,8 @@ class UserController(userDao: UserDao)(implicit ec: ExecutionContext) extends Co
         Ok(Json.obj("status" -> "OK", "message" -> ("Place '" + user.name + "' saved.")))
       })
   }
+
+  def delete(userId: Int) = Action.async { request =>
+    userDao.delete(userId) map { result => Ok(Json.toJson("Succeed in delete user.")) }
+  }
 }
