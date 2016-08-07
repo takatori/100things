@@ -14,7 +14,8 @@ class UserDao(dbConfig: DatabaseConfig[JdbcProfile]) {
 
   def all: Future[Seq[User]] = db.run(Users.result)
 
-  def insert(user: User): Future[Int] = db.run((Users returning Users.map(_.id)) += user)
+  def fetch(userId: Int): Future[Option[User]] = db.run(Users.filter(_.id === userId).result.headOption)
 
+  def insert(user: User): Future[Int] = db.run((Users returning Users.map(_.id)) += user)
 }
 
