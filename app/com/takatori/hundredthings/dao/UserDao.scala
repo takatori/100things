@@ -16,5 +16,5 @@ class UserDao(dbConfig: DatabaseConfig[JdbcProfile]) {
 
   def insert(user: User): Future[Int] = db.run((Users returning Users.map(_.id)) += user)
 
+  def update(user: User): Future[Int] = db.run(Users.filter(_.id === user.id).update(user))
 }
-
