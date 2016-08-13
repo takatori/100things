@@ -26,9 +26,16 @@ class UserControllerSpec extends Specification {
 
       json mustEqual Json.toJson(users)
     }
-  }
 
-  "Create user" in new ControllerContext {
+    "return an user by user_id" in new ControllerContext {
+      val user = Some(User(1, "takatori"))
+      userDao.fetch(1) returns Future.successful(user)
+      val response = userController.fetch(1)(FakeRequest())
 
+      status(response) must be equalTo OK
+      val json = contentAsJson(response)
+
+      json mustEqual Json.toJson(user)
+    }
   }
 }

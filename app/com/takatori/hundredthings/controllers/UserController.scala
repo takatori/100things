@@ -11,6 +11,11 @@ class UserController(userDao: UserDao)(implicit ec: ExecutionContext) extends Co
 
   def fetchAll() = Action.async { request => userDao.all.map { users => Ok(Json.toJson(users)) } }
 
+  def fetch(userId: Int) = Action.async { request =>
+    userDao.fetch(userId) map { user => Ok(Json.toJson(user)) }
+    //BadRequest(Json.obj("status" -> "KO", "message" -> JsError.toJson("not found")))
+  }
+
   def insert() = Action(parse.json) { request =>
     val userResult: JsResult[User] = request.body.validate[User]
     userResult.fold(
