@@ -5,7 +5,7 @@ import com.takatori.hundredthings.models.User
 import play.api.libs.json.{JsError, JsResult, Json}
 import play.api.mvc.{Action, Controller}
 
-import scala.concurrent.ExecutionContext
+import scala.concurrent.{ExecutionContext, Future}
 
 class UserController(userDao: UserDao)(implicit ec: ExecutionContext) extends Controller {
 
@@ -16,15 +16,15 @@ class UserController(userDao: UserDao)(implicit ec: ExecutionContext) extends Co
     //BadRequest(Json.obj("status" -> "KO", "message" -> JsError.toJson("not found")))
   }
 
-  def insert() = Action(parse.json) { request =>
+  def insert() = Action.async(parse.json) { request =>
     val userResult: JsResult[User] = request.body.validate[User]
+    // Future[Result]型をかえす必要がある　
     userResult.fold(
-      errors => {
-        BadRequest(Json.obj("status" -> "KO", "message" -> JsError.toJson(errors)))
-      },
+      errors => Future.successful(BadRequest(Json.obj("status" -> "KO", "message" -> JsError.toJson(errors)))),
       user => {
-        userDao.insert(user)
-        Ok(Json.obj("status" -> "OK", "message" -> ("Place '" + user.name + "' saved.")))
+        userDao.insert(user) map { id =>
+            Ok(Json.obj("status" -> "OK", "message" -> ("Place '" + user.name + "' saved.")))
+        }
       })
   }
 }

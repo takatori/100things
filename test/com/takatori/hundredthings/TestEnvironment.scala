@@ -1,11 +1,10 @@
 package com.takatori.hundredthings
 
-import org.specs2.execute.{AsResult, Result}
-import org.specs2.mutable.Around
+import akka.actor.ActorSystem
+import akka.stream.{ActorMaterializer, Materializer}
 import org.specs2.specification.Scope
 import play.api._
 import play.api.db.slick.{SlickApi, SlickComponents}
-import play.api.test.Helpers
 
 object TestEnvironment {
 
@@ -27,9 +26,11 @@ object TestEnvironment {
   }
 
   class WithApplicationComponents extends Scope {
-    implicit lazy val appComponents:AppComponents = initAppComponents
-    implicit lazy val app:play.api.Application = appComponents.application
-    implicit lazy val api:SlickApi = appComponents.api
+    implicit lazy val appComponents: AppComponents = initAppComponents
+    implicit lazy val app: play.api.Application = appComponents.application
+    implicit lazy val api: SlickApi = appComponents.api
+    implicit lazy val actorSystem = ActorSystem()
+    implicit lazy val materializer: Materializer = ActorMaterializer()
 
     // Afterとコンフリクトするのでコメントアウト
     /*
