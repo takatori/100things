@@ -28,6 +28,17 @@ class UserController(userDao: UserDao)(implicit ec: ExecutionContext) extends Co
       })
   }
 
+  def update(userId: Int) = Action.async(parse.json) { request =>
+    val userResult: JsResult[User] = request.body.validate[User]
+    userResult.fold(
+      errors => Future.successful(BadRequest(Json.obj("status" -> "KO", "message" -> JsError.toJson(errors)))),
+      user => {
+        userDao.update(user) map { affetctedRows =>
+          Ok(Json.obj("status" -> "OK", "message" -> ("Place '" + user.name + "' update.")))
+        }
+      })
+  }
+
   def delete(userId: Int) = Action.async { request =>
     userDao.delete(userId) map { result => Ok(Json.toJson("Succeed in delete user.")) } // TODO: 失敗時の処理
   }

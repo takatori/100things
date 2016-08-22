@@ -4,6 +4,7 @@
 
 GET     /                           com.takatori.hundredthings.controllers.UserController.fetchAll()
 POST    /users                      com.takatori.hundredthings.controllers.UserController.insert()
+PUT     /users/:user_id             com.takatori.hundredthings.controllers.UserController.update(user_id: Int)
 DELETE  /users/:user_id             com.takatori.hundredthings.controllers.UserController.delete(user_id: Int)
 
 # Map static resources from the /public folder to the /assets URL path
