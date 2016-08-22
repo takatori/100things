@@ -17,6 +17,10 @@ class UserDAOSpec(implicit ee: ExecutionEnv) extends Specification {
     "create user" in new WithApplicationComponents with DaoContext {
       userDao.insert(User(100, "specs2")) must beEqualTo(3).await
     }
+
+    "delete user" in new WithApplicationComponents with DaoContext {
+      userDao.delete(1) must beEqualTo(1).await
+    }
   }
 }
 

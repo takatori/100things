@@ -17,4 +17,6 @@ class UserDao(dbConfig: DatabaseConfig[JdbcProfile]) {
   def fetch(userId: Int): Future[Option[User]] = db.run(Users.filter(_.id === userId).result.headOption)
 
   def insert(user: User): Future[Int] = db.run((Users returning Users.map(_.id)) += user)
+
+  def delete(userId: Int): Future[Int] = db.run(Users.filter(_.id === userId).delete) // return affected rows count
 }

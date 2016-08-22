@@ -21,6 +21,7 @@ class UserControllerSpec extends Specification {
         User(2, "satoshi")
       )
       userDao.all returns Future.successful(users)
+
       val response = userController.fetchAll()(FakeRequest())
 
       status(response) must be equalTo OK
@@ -32,6 +33,7 @@ class UserControllerSpec extends Specification {
     "return an user by user_id" in new ControllerContext {
       val user = Some(User(1, "takatori"))
       userDao.fetch(1) returns Future.successful(user)
+
       val response = userController.fetch(1)(FakeRequest())
 
       status(response) must be equalTo OK
@@ -50,6 +52,14 @@ class UserControllerSpec extends Specification {
       status(response) must be equalTo OK
       val json = contentAsJson(response)
       println(json)
+    }
+
+    "delete user" in new WithApplicationComponents with ControllerContext {
+        userDao.delete(any) returns Future.successful(1) // mock
+
+      val response = userController.delete(1)(FakeRequest())
+
+      status(response) must be equalTo OK
     }
   }
 }
