@@ -11,15 +11,15 @@ class UserDAOSpec(implicit ee: ExecutionEnv) extends Specification {
     "return all" in new WithApplicationComponents with DaoContext { }
 
     "fetch an user by id" in new WithApplicationComponents with DaoContext {
-      userDao.fetch(1) must beEqualTo(Some(User(1, "takatori"))).await
+      userDao.fetch(1) must beEqualTo(Some(User(Some(1), "takatori"))).await
     }
 
     "create user" in new WithApplicationComponents with DaoContext {
-      userDao.insert(User(100, "specs2")) must beEqualTo(3).await
+      userDao.insert(User(None, "specs2")) must beEqualTo(3).await
     }
 
     "update user" in new WithApplicationComponents with DaoContext {
-      userDao.update(User(1, "takatori2")) must beEqualTo(1).await
+      userDao.update(1, User(None, "takatori2")) must beEqualTo(1).await
     }
 
     "delete user" in new WithApplicationComponents with DaoContext {

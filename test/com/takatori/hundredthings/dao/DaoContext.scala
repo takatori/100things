@@ -19,8 +19,8 @@ trait DaoContext extends MockDatabaseModule with DaoModule with Scope with After
     // Create the tables
     (Users.schema).create,
     // Insert some users
-    Users += User(1, "takatori"),
-    Users += User(2, "satoshi")
+    Users += User(None, "takatori"),
+    Users += User(None, "satoshi")
   )
 
   Await.result(db.run(setup), 30 seconds)

@@ -33,7 +33,7 @@ class UserController(userDao: UserDao)(implicit ec: ExecutionContext) extends Co
     userResult.fold(
       errors => Future.successful(BadRequest(Json.obj("status" -> "KO", "message" -> JsError.toJson(errors)))),
       user => {
-        userDao.update(user) map { affetctedRows =>
+        userDao.update(userId, user) map { affetctedRows =>
           Ok(Json.obj("status" -> "OK", "message" -> ("Place '" + user.name + "' update.")))
         }
       })

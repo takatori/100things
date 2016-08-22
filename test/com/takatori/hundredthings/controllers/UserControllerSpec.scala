@@ -17,8 +17,8 @@ class UserControllerSpec extends Specification {
   "User Controller" should {
     "return all" in new ControllerContext {
       val users = Seq(
-        User(1, "takatori"),
-        User(2, "satoshi")
+        User(Some(1), "takatori"),
+        User(Some(2), "satoshi")
       )
       userDao.all returns Future.successful(users)
 
@@ -31,7 +31,7 @@ class UserControllerSpec extends Specification {
     }
 
     "return an user by user_id" in new ControllerContext {
-      val user = Some(User(1, "takatori"))
+      val user = Some(User(Some(1), "takatori"))
       userDao.fetch(1) returns Future.successful(user)
 
       val response = userController.fetch(1)(FakeRequest())
@@ -45,7 +45,7 @@ class UserControllerSpec extends Specification {
     "create user" in new WithApplicationComponents with ControllerContext {
       userDao.insert(any) returns Future.successful(1) // mock
 
-      val payload = Json.parse("""{ "id": 1 , "name": "test" }""")
+      val payload = Json.parse("""{ "name": "test" }""")
       val fakeRequest = FakeRequest(Helpers.POST, "/users", FakeHeaders(Seq("Content-Type" -> "application/json")), payload)
       val response = userController.insert()(fakeRequest)
       //val response = result.run() // http://stackoverflow.com/questions/35685066/how-to-test-a-controller-method-that-uses-a-custom-parser-in-play-2-5
@@ -54,9 +54,9 @@ class UserControllerSpec extends Specification {
     }
 
     "update user" in new WithApplicationComponents with ControllerContext {
-      userDao.update(any) returns Future.successful(1) // mock
+      userDao.update(any, any) returns Future.successful(1) // mock
 
-      val payload = Json.parse("""{ "id": 1 , "name": "test" }""")
+      val payload = Json.parse("""{ "name": "test" }""")
       val fakeRequest = FakeRequest(Helpers.PUT, "/users/1", FakeHeaders(Seq("Content-Type" -> "application/json")), payload)
       val response = userController.update(1)(fakeRequest)
 
