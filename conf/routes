@@ -2,9 +2,9 @@
 # This file defines all application routes (Higher priority routes first)
 # ~~~~
 
-# An example controller showing a sample home page
-GET     /                    com.takatori.hundredthings.controllers.UserController.fetchAll()
-DELETE  /users/:user_id      com.takatori.hundredthings.controllers.UserController.delete(user_id: Int)
+GET     /                           com.takatori.hundredthings.controllers.UserController.fetchAll()
+POST    /users                      com.takatori.hundredthings.controllers.UserController.insert()
+DELETE  /users/:user_id             com.takatori.hundredthings.controllers.UserController.delete(user_id: Int)
 
 # Map static resources from the /public folder to the /assets URL path
 #GET     /assets/*file               controllers.Assets.versioned(path="/public", file: Asset)

@@ -15,8 +15,8 @@ trait DaoContext extends MockDatabaseModule with DaoModule with Scope with After
   val Users = TableQuery[UserTable]
 
   val setup = DBIO.seq(
-    // Create the tables
     sqlu"DROP ALL OBJECTS",
+    // Create the tables
     (Users.schema).create,
     // Insert some users
     Users += User(1, "takatori"),
@@ -26,6 +26,7 @@ trait DaoContext extends MockDatabaseModule with DaoModule with Scope with After
   Await.result(db.run(setup), 30 seconds)
 
   def after = {
+    println("teardown test")
     val teardown = DBIO.seq(sqlu"DROP ALL OBJECTS")
     Await.result(db.run(teardown), 30 seconds)
   }
