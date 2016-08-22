@@ -18,4 +18,3 @@ class UserDao(dbConfig: DatabaseConfig[JdbcProfile]) {
 
   def insert(user: User): Future[Int] = db.run((Users returning Users.map(_.id)) += user)
 }
-
