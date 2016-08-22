@@ -51,7 +51,16 @@ class UserControllerSpec extends Specification {
       //val response = result.run() // http://stackoverflow.com/questions/35685066/how-to-test-a-controller-method-that-uses-a-custom-parser-in-play-2-5
       status(response) must be equalTo OK
       val json = contentAsJson(response)
-      println(json)
+    }
+
+    "update user" in new WithApplicationComponents with ControllerContext {
+      userDao.update(any) returns Future.successful(1) // mock
+
+      val payload = Json.parse("""{ "id": 1 , "name": "test" }""")
+      val fakeRequest = FakeRequest(Helpers.PUT, "/users/1", FakeHeaders(Seq("Content-Type" -> "application/json")), payload)
+      val response = userController.update(1)(fakeRequest)
+
+      status(response) must be equalTo OK
     }
 
     "delete user" in new WithApplicationComponents with ControllerContext {

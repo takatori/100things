@@ -28,15 +28,14 @@ class UserController(userDao: UserDao)(implicit ec: ExecutionContext) extends Co
       })
   }
 
-  def update(userId: Int) = Action(parse.json) { request =>
+  def update(userId: Int) = Action.async(parse.json) { request =>
     val userResult: JsResult[User] = request.body.validate[User]
     userResult.fold(
-      errors => {
-        BadRequest(Json.obj("status" -> "KO", "message" -> JsError.toJson(errors)))
-      },
+      errors => Future.successful(BadRequest(Json.obj("status" -> "KO", "message" -> JsError.toJson(errors)))),
       user => {
-        userDao.update(user)
-        Ok(Json.obj("status" -> "OK", "message" -> ("Place '" + user.name + "' update.")))
+        userDao.update(user) map { affetctedRows =>
+          Ok(Json.obj("status" -> "OK", "message" -> ("Place '" + user.name + "' update.")))
+        }
       })
   }
 
