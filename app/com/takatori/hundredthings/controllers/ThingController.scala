@@ -9,6 +9,10 @@ import scala.concurrent.ExecutionContext
 class ThingController(thingDao: ThingDao)(implicit ec: ExecutionContext) extends Controller {
 
   def list(userId: Int) = Action.async { request =>
-    thingDao.list(userId) map { things => Ok(Json.toJson(things))}
+    thingDao.list(userId) map { things => Ok(Json.toJson(things)) }
+  }
+
+  def fetch(id: Int) = Action.async { request =>
+    thingDao.fetch(id) map { thing => Ok(Json.toJson(thing)) }
   }
 }

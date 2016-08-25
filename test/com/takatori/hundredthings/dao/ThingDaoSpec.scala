@@ -17,7 +17,15 @@ class ThingDAOSpec(implicit ee: ExecutionEnv) extends Specification {
       things(0).title === "test thing"
       things(0).description === Some("test description")
       things(0).done === false
-      println(things(0).createdAt)
      }
+
+    "return the thing by id" in new WithApplicationComponents with DaoContext {
+      val thing = Await.result(thingDao.fetch(1), Duration.Inf).get
+      thing.id === Some(1)
+      thing.userId === 1
+      thing.title === "test thing"
+      thing.description === Some("test description")
+      thing.done === false
+    }
   }
 }
