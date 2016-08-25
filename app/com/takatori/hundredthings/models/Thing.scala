@@ -25,9 +25,9 @@ class ThingTable(tag: Tag) extends Table[Thing](tag, "Thing") {
   def id          = column[Int]("THING_ID", O.PrimaryKey, O.AutoInc)
   def userId      = column[Int]("USER_ID")
   def title       = column[String]("TITLE")
-  def description = column[String]("DESCRIPTION")
-  def done        = column[Boolean]
-  def createdAt   = column[DateTime]("CREATED_AT", O.Default(new DateTime()))
-  def *           = (id.?, userId, title, description, done) <> ((Thing.apply _).tupled, Thing.unapply)
+  def description = column[Option[String]]("DESCRIPTION")
+  def done        = column[Boolean]("DONE")
+  def createdAt   = column[Option[DateTime]]("CREATED_AT", O.Default(Some(new DateTime())))
+  def *           = (id.?, userId, title, description, done, createdAt) <> ((Thing.apply _).tupled, Thing.unapply)
   def user        = foreignKey("USER_KEY", userId, users)(_.id, onDelete=ForeignKeyAction.Cascade)
 }

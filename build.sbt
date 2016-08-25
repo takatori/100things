@@ -2,7 +2,9 @@ name := """100things"""
 
 version := "1.0-SNAPSHOT"
 
-lazy val root = (project in file(".")).enablePlugins(PlayScala)
+lazy val root = (project in file(".")).enablePlugins(PlayScala).dependsOn(githubRepo)
+
+lazy val githubRepo = uri("git://github.com/tototoshi/slick-joda-mapper.git")
 
 scalaVersion := "2.11.7"
 

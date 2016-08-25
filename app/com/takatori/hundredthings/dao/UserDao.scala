@@ -18,7 +18,7 @@ class UserDao(dbConfig: DatabaseConfig[JdbcProfile]) {
 
   def insert(user: User): Future[Int]  = db.run((Users returning Users.map(_.id)) += user)
 
-  def update(userId: Int, user: User): Future[Int]  = db.run(Users.filter(_.id === userId).update(user))
+  def update(userId: Int, user: User): Future[Int]  = db.run(Users.filter(_.id === userId).map(u => u.name).update(user.name))
 
   def delete(userId: Int): Future[Int] = db.run(Users.filter(_.id === userId).delete) // return affected rows count
 }
