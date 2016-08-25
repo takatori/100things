@@ -14,4 +14,6 @@ class ThingDao(dbConfig: DatabaseConfig[JdbcProfile]) {
 
   def list(userId: Int): Future[Seq[Thing]] = db.run(Things.filter(_.userId === userId).result)
 
+  def fetch(id: Int): Future[Option[Thing]] = db.run(Things.filter(_.id === id).result.headOption)
+
 }
