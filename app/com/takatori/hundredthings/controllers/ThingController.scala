@@ -29,6 +29,17 @@ class ThingController(thingDao: ThingDao)(implicit ec: ExecutionContext) extends
     )
   }
 
+  def update(thingId: Int) = Action.async(parse.json) { request =>
+    val thingResult: JsResult[Thing] = request.body.validate[Thing]
+    thingResult.fold(
+      errors => Future.successful(BadRequest(Json.obj("status" -> "KO", "message" -> JsError.toJson(errors)))),
+      thing => {
+        thingDao.update(thingId, thing) map { affetctedRows =>
+          Ok(Json.obj("status" -> "OK", "message" -> ("Place '" + thing.title + "' update.")))
+        }
+      })
+  }
+
   def delete(thingId: Int) = Action.async { request =>
     thingDao.delete(thingId) map { result => Ok(Json.toJson("Succeed in delete thing.")) }
   }

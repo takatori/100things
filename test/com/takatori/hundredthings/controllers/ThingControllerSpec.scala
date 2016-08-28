@@ -62,6 +62,25 @@ class ThingControllerSpec extends Specification {
     val json = contentAsJson(response)
   }
 
+  "update thing" in new WithApplicationComponents with ControllerContext {
+    thingDao.update(any, any) returns Future.successful(1)
+
+    val payload = Json.parse(
+      """
+        |{
+        | "userId": 1,
+        | "title": "test",
+        | "description": "test",
+        | "done": true
+        |}
+      """.stripMargin)
+
+    val fakeRequest = FakeRequest(Helpers.POST, "/things/1", FakeHeaders(Seq("Content-Type" -> "application/json")), payload)
+    val response = thingController.update(1)(fakeRequest)
+
+    status(response) must be equalTo OK
+  }
+
   "delete thing" in new WithApplicationComponents with ControllerContext {
     thingDao.delete(any) returns Future.successful(1)
 
