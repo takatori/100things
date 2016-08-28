@@ -28,4 +28,8 @@ class ThingController(thingDao: ThingDao)(implicit ec: ExecutionContext) extends
       }
     )
   }
+
+  def delete(thingId: Int) = Action.async { request =>
+    thingDao.delete(thingId) map { result => Ok(Json.toJson("Succeed in delete thing.")) }
+  }
 }

@@ -61,4 +61,12 @@ class ThingControllerSpec extends Specification {
     status(response) must be equalTo OK
     val json = contentAsJson(response)
   }
+
+  "delete thing" in new WithApplicationComponents with ControllerContext {
+    thingDao.delete(any) returns Future.successful(1)
+
+    val response = thingController.delete(1)(FakeRequest())
+
+    status(response) must be equalTo OK
+  }
 }

@@ -32,5 +32,9 @@ class ThingDAOSpec(implicit ee: ExecutionEnv) extends Specification {
     "create thing" in new WithApplicationComponents with DaoContext {
       thingDao.create(1, Thing(None, 1, "test", Some("test"), false, None)) must beEqualTo(3).await
     }
+
+    "delete thing" in new WithApplicationComponents with DaoContext {
+      thingDao.delete(1) must beEqualTo(1).await
+    }
   }
 }
