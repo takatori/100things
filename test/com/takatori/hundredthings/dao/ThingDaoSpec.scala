@@ -1,6 +1,7 @@
 package com.takatori.hundredthings.dao
 
 import com.takatori.hundredthings.TestEnvironment.WithApplicationComponents
+import com.takatori.hundredthings.models.Thing
 import org.specs2.concurrent.ExecutionEnv
 import org.specs2.mutable.Specification
 
@@ -26,6 +27,10 @@ class ThingDAOSpec(implicit ee: ExecutionEnv) extends Specification {
       thing.title === "test thing"
       thing.description === Some("test description")
       thing.done === false
+    }
+
+    "create thing" in new WithApplicationComponents with DaoContext {
+      thingDao.create(1, Thing(None, 1, "test", Some("test"), false, None)) must beEqualTo(3).await
     }
   }
 }
