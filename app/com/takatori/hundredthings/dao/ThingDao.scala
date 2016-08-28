@@ -17,4 +17,6 @@ class ThingDao(dbConfig: DatabaseConfig[JdbcProfile]) {
   def fetch(id: Int): Future[Option[Thing]] = db.run(Things.filter(_.id === id).result.headOption)
 
   def create(userId: Int, thing: Thing): Future[Int] = db.run((Things returning Things.map(_.id)) += thing)
+
+  def delete(thingId: Int): Future[Int] = db.run(Things.filter(_.id === thingId).delete)
 }
