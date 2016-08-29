@@ -4,10 +4,10 @@ import _root_.controllers.Assets
 import com.takatori.hundredthings.modules.{ControllerModule, DaoModule, DatabaseModule}
 import play.api.ApplicationLoader.Context
 import play.api._
+import com.softwaremill.macwire._
 import play.api.routing.Router
 import router.Routes
 
-import com.softwaremill.macwire._
 import scala.concurrent.ExecutionContext
 
 /**
@@ -17,11 +17,11 @@ class AppApplicationLoader extends ApplicationLoader {
   def load(context: Context) = {
     LoggerConfigurator(context.environment.classLoader).foreach { _.configure(context.environment)}
     //new AppComponents(context).application
-    (new BuiltInComponentsFromContext(context) with AppComponents).application
+    new AppComponents(context).application
   }
 }
 
-trait AppComponents extends BuiltInComponents with DatabaseModule with DaoModule with ControllerModule
+class AppComponents(context: Context) extends BuiltInComponentsFromContext(context) with DatabaseModule with DaoModule with ControllerModule
 {
     implicit val ec: ExecutionContext = scala.concurrent.ExecutionContext.Implicits.global
     lazy val assets: Assets = wire[Assets]

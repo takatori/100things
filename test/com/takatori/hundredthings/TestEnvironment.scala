@@ -22,7 +22,7 @@ object TestEnvironment {
     val context = ApplicationLoader.createContext(
       new Environment(new java.io.File("."), ApplicationLoader.getClass.getClassLoader, Mode.Test)
     )
-    (new BuiltInComponentsFromContext(context) with AppComponents with SlickComponents)
+    new AppComponents(context) with SlickComponents
   }
 
   class WithApplicationComponents extends Scope {
