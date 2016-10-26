@@ -3,9 +3,30 @@ package com.takatori.hundredthings.controllers
 import com.takatori.hundredthings.dao.UserDao
 import com.takatori.hundredthings.models.User
 import play.api.libs.json.{JsError, JsResult, Json}
-import play.api.mvc.{Action, Controller}
-
+import play.api.mvc.{Action, ActionBuilder, ActionTransformer, Controller, Request, WrappedRequest}
 import scala.concurrent.{ExecutionContext, Future}
+
+
+class UserRequest[A](val user: Option[User], request: Request[A]) extends WrappedRequest[A](request)
+
+trait UserActionBuilder {
+
+  def userDao: UserDao
+
+  def UserAction = new ActionBuilder[UserRequest] with ActionTransformer[UserRequest]{
+
+    def transform[A](request: Request[A]): Future[UserRequest[A]] = {
+
+      val user = for {
+        userIdString <- request.session.get("user_id")
+        userId <- userIdString.toInt
+        user <- userDao.fetch(userId)
+      } yield user
+
+      Future.successful(new UserRequest(user, request))
+    }
+  }
+}
 
 class UserController(userDao: UserDao)(implicit ec: ExecutionContext) extends Controller {
 
