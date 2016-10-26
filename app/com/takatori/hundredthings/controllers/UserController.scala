@@ -4,28 +4,30 @@ import com.takatori.hundredthings.dao.UserDao
 import com.takatori.hundredthings.models.User
 import play.api.libs.json.{JsError, JsResult, Json}
 import play.api.mvc.{Action, ActionBuilder, ActionTransformer, Controller, Request, WrappedRequest}
+
 import scala.concurrent.{ExecutionContext, Future}
 
 
-class UserRequest[A](val user: Option[User], request: Request[A]) extends WrappedRequest[A](request)
-
 trait UserActionBuilder {
+
+  class UserRequest[A](val user: Option[User], request: Request[A]) extends WrappedRequest[A](request)
 
   def userDao: UserDao
 
   def UserAction = new ActionBuilder[UserRequest] with ActionTransformer[UserRequest]{
 
-    def transform[A](request: Request[A]): Future[UserRequest[A]] = {
-
-      val user = for {
+    def transform[A](request: Request[A]): Future[UserRequest[A]] =
+      for {
         userIdString <- request.session.get("user_id")
         userId <- userIdString.toInt
         user <- userDao.fetch(userId)
-      } yield user
-
-      Future.successful(new UserRequest(user, request))
-    }
+        userRequest <- new UserRequest(user, request)
+      } yield userRequest match {
+        case None => Future.failed(new Exception("Please Login"))
+        case Some(r) => Future.successful(r)
+      }
   }
+
 }
 
 class UserController(userDao: UserDao)(implicit ec: ExecutionContext) extends Controller {
