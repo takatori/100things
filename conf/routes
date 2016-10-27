@@ -2,8 +2,9 @@
 # This file defines all application routes (Higher priority routes first)
 # ~~~~
 
-GET     /                           com.takatori.hundredthings.controllers.UserController.fetchAll()
-POST    /users                      com.takatori.hundredthings.controllers.UserController.insert()
+GET     /users                      com.takatori.hundredthings.controllers.UserController.fetchAll()
+GET     /users/:user_id             com.takatori.hundredthings.controllers.UserController.fetch(user_id: Int)
+POST    /users                      com.takatori.hundredthings.controllers.UserController.create()
 PUT     /users/:user_id             com.takatori.hundredthings.controllers.UserController.update(user_id: Int)
 DELETE  /users/:user_id             com.takatori.hundredthings.controllers.UserController.delete(user_id: Int)
 
