@@ -7,7 +7,6 @@ import play.api.mvc.{Action, ActionBuilder, ActionTransformer, Controller, Reque
 
 import scala.concurrent.{ExecutionContext, Future}
 
-
 trait UserActionBuilder {
 
   class UserRequest[A](val user: Option[User], request: Request[A]) extends WrappedRequest[A](request)
@@ -30,23 +29,31 @@ trait UserActionBuilder {
 
 }
 
+
+
 class UserController(userDao: UserDao)(implicit ec: ExecutionContext) extends Controller {
 
-  def fetchAll() = Action.async { request => userDao.all.map { users => Ok(Json.toJson(users)) } }
-
-  def fetch(userId: Int) = Action.async { request =>
-    userDao.fetch(userId) map { user => Ok(Json.toJson(user)) }
-    //BadRequest(Json.obj("status" -> "KO", "message" -> JsError.toJson("not found")))
+  def fetchAll() = Action.async { request =>
+    userDao.all.map { users => Ok(Json.toJson(users)) }
   }
 
-  def insert() = Action.async(parse.json) { request =>
+  def fetch(userId: Int) = Action.async { request =>
+    userDao.fetch(userId) map {
+      _ match {
+        case None => BadRequest(Json.obj("status" -> "KO", "message" -> "The User is not found."))
+        case Some(u) => Ok(Json.toJson(u))
+      }
+    }
+  }
+
+  def create() = Action.async(parse.json) { request =>
     val userResult: JsResult[User] = request.body.validate[User]
     // Future[Result]型をかえす必要がある　
     userResult.fold(
       errors => Future.successful(BadRequest(Json.obj("status" -> "KO", "message" -> JsError.toJson(errors)))),
       user => {
-        userDao.insert(user) map { id =>
-            Ok(Json.obj("status" -> "OK", "message" -> ("Place '" + user.name + "' saved.")))
+        userDao.create(user) map { id =>
+            Ok(Json.obj("status" -> "OK", "message" -> ("Place '" + user.name + "' saved."))).withSession("user_id" -> id.toString)
         }
       })
   }
